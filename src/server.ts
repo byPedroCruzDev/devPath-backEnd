@@ -5,12 +5,10 @@ import { AppDataSource } from "./data-source";
 
 AppDataSource.initialize()
   .then((): void => {
-    console.log("Server is running");
-
     const PORT: number = Number(process.env.PORT) || 3000;
 
     app.listen(PORT, () => {
-      console.log("Servidor executando");
+      console.log(`Servidor executando ${PORT}`);
     });
   })
   .catch((err: unknown): void => {
