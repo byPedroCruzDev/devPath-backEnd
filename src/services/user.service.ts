@@ -3,7 +3,7 @@ import { AppDataSource } from "../data-source";
 import { User } from "../entities/user.entity";
 import { IUser } from "../interface/user.interface";
 
-class UserService {
+export class UserService {
   static async create(data: IUser) {
     const userRepository = AppDataSource.getRepository(User);
 
@@ -35,5 +35,3 @@ class UserService {
 
   static async delete(req: Request, res: Response) {}
 }
-
-export default UserService;
