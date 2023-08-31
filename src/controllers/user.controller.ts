@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
-import UserService from "../services/user.services";
+import { UserService } from "../services/user.service";
 
 export class UsersController {
   static async create(req: Request, res: Response) {
-    const data = req.body;
+    const data: any = req.body;
+
     const response: any = await UserService.create(data);
     return res.status(201).json(response);
   }
