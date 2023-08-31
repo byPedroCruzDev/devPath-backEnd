@@ -4,9 +4,10 @@ import { PostService } from "../services/post.service";
 export class PostController {
   static async create(req: Request, res: Response) {
     const data: any = req.body;
-    const id: any = req.user.id;
+    const user = req;
+    console.log(user);
 
-    const response: any = PostService.create(data, id);
+    const response: any = PostService.create(data, user);
 
     return res.status(201).json(response);
   }
