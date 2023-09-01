@@ -4,29 +4,26 @@ import jwt from "jsonwebtoken";
 import "dotenv/config";
 import { User } from "../entities/user.entity";
 import AppError from "../errors/appError";
+import { SessionCreate, SessionReturn } from "../interface/session.interfece";
 
 export class SessionServices {
-  static async login({ email, password }: any): Promise<object> {
+  static async login({
+    email,
+    password,
+  }: SessionCreate): Promise<SessionReturn> {
     const userRepository = AppDataSource.getRepository(User);
 
-    const user: any = await userRepository.findOne({
-      where: { email: email },
-    });
+    const user: User | null = await userRepository.findOneBy({ email });
 
-    if (!user) {
-      throw new AppError("Email or password invalid", 403);
-    }
-    //pro inferno passwordMatch
-    const passwordMatch = await compare(user.password, password);
+    if (!user) throw new AppError("Email or password invalid", 403);
 
-    const token = jwt.sign({}, process.env.SECRET_KEY!, {
+    const passwordMatch: boolean = await compare(password, user.password);
+
+    const token: string = jwt.sign({}, process.env.SECRET_KEY!, {
       subject: user.id.toString(),
       expiresIn: "72h",
     });
 
-    delete user.password;
-    delete user.confirmPassword;
-
-    return { token, user };
+    return { token };
   }
 }

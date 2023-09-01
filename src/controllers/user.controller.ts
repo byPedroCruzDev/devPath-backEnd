@@ -7,11 +7,7 @@ export class UsersController {
     const response: any = await UserService.create(req.body);
     return res.status(201).json(response);
   }
-  static async listAll(req: Request, res: Response): Promise<Response> {
-    const response: UserRead = await UserService.listAll();
-
-    return res.status(200).json(response);
-  }
+  static async listAll(req: Request, res: Response) {}
   static async listOne() {}
   static async update() {}
   static async delete() {}
