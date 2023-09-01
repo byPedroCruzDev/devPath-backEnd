@@ -17,9 +17,7 @@ export class UserService {
 
   static async listOne(req: Request, res: Response) {}
 
-  static async listAll(): Promise<UserRead> {
-    return userReadSchema.parse(AppDataSource.getRepository(User));
-  }
+  static async listAll() {}
 
   static async update(req: Request, res: Response) {}
 
