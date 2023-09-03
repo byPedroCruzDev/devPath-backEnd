@@ -1,27 +1,22 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import AppError from "../errors/appError";
+import { verify } from "jsonwebtoken";
 
 export class Middleware {
-  static async Auth(req: Request, res: Response, next: NextFunction) {
-    let token = req.headers.authorization;
+  static Auth(req: Request, res: Response, next: NextFunction): void {
+    let authorization: string | undefined = req.headers.authorization;
 
-    console.log(token);
+    console.log(authorization);
 
-    if (!token) {
-      throw new AppError("Invalid token", 401);
-    }
+    if (!authorization) throw new AppError("Invalid token", 401);
 
-    token = token.split(" ")[1];
+    const [bearer, token]: Array<string> = authorization.split(" ");
 
-    jwt.verify(token, process.env.SECRET_KEY!, (error, decoded: any) => {
-      if (error) {
-        throw new AppError(error.message, 401);
-      }
-      req.user = {
-        id: decoded.sub,
-      };
-      return next();
-    });
+    res.locals = {
+      ...res.locals,
+      decoded: verify(token, process.env.SECRET_KEY!),
+    };
+    return next();
   }
 }
