@@ -1,8 +1,11 @@
-import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { User } from "../entities/user.entity";
 import { UserCreate, UserRead, UserReturn } from "../interface/user.interface";
-import { userReadSchema, userReturnSchema } from "../schemas/user.schemas";
+import {
+  userReadSchema,
+  userReadSchemaArray,
+  userReturnSchema,
+} from "../schemas/user.schemas";
 
 export class UserService {
   static async create(data: UserCreate): Promise<UserReturn> {
@@ -15,13 +18,16 @@ export class UserService {
     return userReturnSchema.parse(createUser);
   }
 
-  static async listOne(req: Request, res: Response) {}
+  static async listOne() {}
 
-  static async listAll(): Promise<UserRead> {
-    return userReadSchema.parse(AppDataSource.getRepository(User));
+  static async listAll() {
+    const userRepository = AppDataSource.getRepository(User);
+
+    const allUsers = await userRepository.find();
+    return userReadSchemaArray.parse(allUsers);
   }
 
-  static async update(req: Request, res: Response) {}
+  static async update() {}
 
-  static async delete(req: Request, res: Response) {}
+  static async delete() {}
 }

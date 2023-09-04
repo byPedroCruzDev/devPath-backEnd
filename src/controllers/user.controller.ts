@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { UserService } from "../services/user.service";
-import { UserRead } from "../interface/user.interface";
+import { UserRead, UserReadArray } from "../interface/user.interface";
 
 export class UsersController {
   static async create(req: Request, res: Response): Promise<Response> {
@@ -8,9 +8,8 @@ export class UsersController {
     return res.status(201).json(response);
   }
   static async listAll(req: Request, res: Response): Promise<Response> {
-    const response: UserRead = await UserService.listAll();
-
-    return res.status(200).json(response);
+    const users: UserReadArray = await UserService.listAll();
+    return res.status(200).json(users);
   }
   static async listOne() {}
   static async update() {}
