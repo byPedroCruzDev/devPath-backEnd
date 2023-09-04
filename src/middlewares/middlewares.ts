@@ -40,7 +40,12 @@ export class Middleware {
   }
 
   static IsAdm(req: Request, res: Response, next: NextFunction): void {
+<<<<<<< HEAD
     const adm: boolean = res.locals.decoded.admin;
+=======
+    const adm: any = res.locals.decoded.isAdm;
+
+>>>>>>> feat/users
     if (!adm) throw new AppError("Insufficient permissions", 403);
 
     return next();

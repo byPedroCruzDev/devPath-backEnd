@@ -17,6 +17,7 @@ const userCreateSchema = userSchema.omit({
 
 const userReturnSchema = userSchema.omit({ password: true });
 const userReadSchema = userReturnSchema;
+const userReadSchemaArray = z.array(userReturnSchema);
 const userUpdateSchema = userCreateSchema.omit({ isAdmin: true }).partial();
 
 export {
@@ -25,4 +26,5 @@ export {
   userUpdateSchema,
   userReturnSchema,
   userReadSchema,
+  userReadSchemaArray,
 };
