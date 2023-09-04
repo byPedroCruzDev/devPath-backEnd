@@ -1,37 +1,33 @@
-import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { User } from "../entities/user.entity";
-import { IUser } from "../interface/user.interface";
+import { UserCreate, UserRead, UserReturn } from "../interface/user.interface";
+import {
+  userReadSchema,
+  userReadSchemaArray,
+  userReturnSchema,
+} from "../schemas/user.schemas";
 
 export class UserService {
-  static async create(data: IUser) {
+  static async create(data: UserCreate): Promise<UserReturn> {
     const userRepository = AppDataSource.getRepository(User);
 
-    const createUser: IUser = userRepository.create(data);
+    const createUser: User = userRepository.create(data);
 
     await userRepository.save(createUser);
 
-    const response: any = await userRepository.findOne({
-      where: { id: createUser.id },
-    });
-    console.log(response);
-
-    const { password, ...userResponse } = response;
-
-    return userResponse;
+    return userReturnSchema.parse(createUser);
   }
 
-  static async listOne(req: Request, res: Response) {}
+  static async listOne() {}
 
   static async listAll() {
     const userRepository = AppDataSource.getRepository(User);
 
-    const findUser: any = await userRepository.find();
-
-    return { message: "Lista de usuarios", ...findUser.reverse() };
+    const allUsers = await userRepository.find();
+    return userReadSchemaArray.parse(allUsers);
   }
 
-  static async update(req: Request, res: Response) {}
+  static async update() {}
 
-  static async delete(req: Request, res: Response) {}
+  static async delete() {}
 }
