@@ -5,7 +5,7 @@ import { Middleware } from "../middlewares/middlewares";
 export const postRoutes = Router();
 
 postRoutes.post("", Middleware.Auth, PostController.create);
-postRoutes.get("", PostController.listAll);
+postRoutes.get("", Middleware.Auth, PostController.listAll);
 postRoutes.get("/:id", PostController.listOne);
 postRoutes.delete("", PostController.delete);
 postRoutes.patch("", PostController.update);

@@ -11,5 +11,6 @@ app.use(express.json());
 app.use(cors());
 app.use("/session", sessionRoutes);
 app.use("/users", userRoutes);
+app.use("/post", postRoutes);
 
 export default app;
