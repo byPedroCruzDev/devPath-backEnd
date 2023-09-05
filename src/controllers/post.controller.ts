@@ -14,7 +14,11 @@ export class PostController {
 
     return res.status(200).json(response);
   }
-  static async listOne() {}
+  static async listOne(req: Request, res: Response): Promise<Response> {
+    const response = await PostService.listOne(req.params.id);
+
+    return res.status(200).json(response);
+  }
   static async update() {}
   static async delete() {}
 }
