@@ -27,7 +27,19 @@ export class PostService {
     return post;
   }
 
-  static async listOne(req: Request, res: Response) {}
+  static async listOne(id: any) {
+    const postRepository = AppDataSource.getRepository(Post);
+
+    const post: any = await postRepository.findOne({
+      where: { id: id },
+      relations: { author: true, comments: { author: true }, like: true },
+    });
+
+    delete post.author.password;
+    delete post.author.confirmPassword;
+
+    return post;
+  }
 
   static async listAll(data: any): Promise<Response> {
     const postRepository = AppDataSource.getRepository(Post);
