@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, response } from "express";
 import { UserService } from "../services/user.service";
 import { UserRead, UserReadArray } from "../interface/user.interface";
 
@@ -17,6 +17,14 @@ export class UsersController {
 
     return res.status(200).json(response);
   }
-  static async update() {}
-  static async delete() {}
+  static async update(req: Request, res: Response) {
+    const response = await UserService.update(req.body, req.params.id);
+
+    return res.status(200).json(response);
+  }
+  static async delete(req: Request, res: Response) {
+    const response = await UserService.delete(req.params.id);
+
+    return res.status(200).json(response);
+  }
 }
