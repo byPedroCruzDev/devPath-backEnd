@@ -18,7 +18,16 @@ export class UserService {
     return userReturnSchema.parse(createUser);
   }
 
-  static async listOne() {}
+  static async listOne(id: any) {
+    const userRepository = AppDataSource.getRepository(User);
+
+    const user: any = await userRepository.findOne({
+      where: { id: id },
+      relations: { post: true },
+    });
+
+    return user;
+  }
 
   static async listAll() {
     const userRepository = AppDataSource.getRepository(User);

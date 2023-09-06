@@ -12,7 +12,11 @@ export class UsersController {
     const users: UserReadArray = await UserService.listAll();
     return res.status(200).json(users);
   }
-  static async listOne() {}
+  static async listOne(req: Request, res: Response) {
+    const response = await UserService.listOne(req.params.id);
+
+    return res.status(200).json(response);
+  }
   static async update() {}
   static async delete() {}
 }
