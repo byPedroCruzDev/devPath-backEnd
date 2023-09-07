@@ -6,6 +6,6 @@ export const userRoutes = Router();
 
 userRoutes.post("", Middleware.UniqueEmail, UsersController.create);
 userRoutes.get("", Middleware.Auth, UsersController.listAll);
-userRoutes.get("/:id", UsersController.listOne);
-userRoutes.delete(":/id", UsersController.delete);
-userRoutes.patch("/:id", UsersController.update);
+userRoutes.get("/:id", Middleware.Auth, UsersController.listOne);
+userRoutes.patch("/:id", Middleware.Auth, UsersController.update);
+userRoutes.delete("/:id", Middleware.Auth, UsersController.delete);
