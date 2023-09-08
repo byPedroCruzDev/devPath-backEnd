@@ -55,11 +55,12 @@ export class UserService {
 
     const userUpdate = await userRepository.update(user!.id, data);
 
-    const { password, ...userWithoutPass } = (await userRepository.findOneBy({
-      id: id,
-    })) as any;
+    const { password, confirmPassword, ...userWithoutPass } =
+      (await userRepository.findOneBy({
+        id: id,
+      })) as any;
 
-    return user;
+    return userWithoutPass;
   }
 
   static async delete(id: any): Promise<any> {
