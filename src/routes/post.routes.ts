@@ -8,4 +8,4 @@ postRoutes.post("", Middleware.Auth, PostController.create);
 postRoutes.get("", Middleware.Auth, PostController.listAll);
 postRoutes.get("/:id", PostController.listOne);
 postRoutes.delete("", PostController.delete);
-postRoutes.patch("", PostController.update);
+postRoutes.patch("/:id", PostController.update);

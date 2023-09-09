@@ -46,7 +46,12 @@ export class Middleware {
 
     return next();
   }
-  static async isOwner(req: Request, res: Response, next: NextFunction) {
+
+  static async isOwner(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     const userRepository = AppDataSource.getRepository(User);
 
     const user: any = await userRepository.findOne({
