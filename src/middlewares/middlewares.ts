@@ -46,8 +46,6 @@ export class Middleware {
 
     return next();
   }
-<<<<<<< Updated upstream
-=======
   static async isOwner(
     req: Request,
     res: Response,
@@ -67,5 +65,4 @@ export class Middleware {
 
     return next();
   }
->>>>>>> Stashed changes
 }
