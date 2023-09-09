@@ -23,7 +23,9 @@ export class UsersController {
     return res.status(200).json(response);
   }
   static async delete(req: Request, res: Response) {
+    console.log("aqui 2");
     const response = await UserService.delete(req.params.id);
+    console.log("aqui 2");
 
     return res.status(200).json({ message: "Sucesseful" });
   }
