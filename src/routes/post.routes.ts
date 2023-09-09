@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { PostController } from "../controllers/post.controller";
 import { Middleware } from "../middlewares/middlewares";
+import { likeController } from "../controllers/likePost.controller";
 
 export const postRoutes = Router();
 
@@ -19,3 +20,5 @@ postRoutes.patch(
   Middleware.isOwnerPost,
   PostController.update
 );
+
+postRoutes.post("/:id/like", Middleware.Auth, likeController.create);
