@@ -46,4 +46,26 @@ export class Middleware {
 
     return next();
   }
+<<<<<<< Updated upstream
+=======
+  static async isOwner(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const userRepository = AppDataSource.getRepository(User);
+
+    const user: any = await userRepository.findOne({
+      where: { id: req.params.id },
+      relations: { post: true },
+    });
+    const userTokenId = parseInt(res.locals.decoded.sub);
+    if (user?.id !== userTokenId) {
+      throw new AppError("You can not do that because you not a owner", 401);
+    }
+    console.log("Aqui");
+
+    return next();
+  }
+>>>>>>> Stashed changes
 }

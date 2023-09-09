@@ -12,7 +12,25 @@ export class UsersController {
     const users: UserReadArray = await UserService.listAll();
     return res.status(200).json(users);
   }
+<<<<<<< Updated upstream
   static async listOne() {}
   static async update() {}
   static async delete() {}
+=======
+  static async listOne(req: Request, res: Response) {
+    const response = await UserService.listOne(req.params.id);
+
+    return res.status(200).json(response);
+  }
+  static async update(req: Request, res: Response) {
+    const response = await UserService.update(req.body, req.params.id);
+
+    return res.status(200).json(response);
+  }
+  static async delete(req: Request, res: Response) {
+    const response = await UserService.delete(req.params.id);
+
+    return res.status(200).json({ message: "Sucesseful" });
+  }
+>>>>>>> Stashed changes
 }
