@@ -23,5 +23,9 @@ export class PostController {
     const response = await PostService.update(req.body, req.params.id);
     return res.status(200).json(response);
   }
-  static async delete() {}
+  static async delete(req: Request, res: Response) {
+    const response = await PostService.delete(req.params.id);
+
+    return res.status(200).send({ message: "Susseceful" });
+  }
 }

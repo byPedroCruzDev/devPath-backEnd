@@ -46,7 +46,6 @@ export class Middleware {
 
     return next();
   }
-
   static async isOwner(
     req: Request,
     res: Response,
