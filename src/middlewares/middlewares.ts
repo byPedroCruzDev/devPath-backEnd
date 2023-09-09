@@ -4,6 +4,7 @@ import AppError from "../errors/appError";
 import { verify } from "jsonwebtoken";
 import { User } from "../entities/user.entity";
 import { AppDataSource } from "../data-source";
+import { Post } from "../entities/post.entity";
 
 export class Middleware {
   static Auth(req: Request, res: Response, next: NextFunction): void {
@@ -63,6 +64,24 @@ export class Middleware {
       throw new AppError("You can not do that because you not a owner", 401);
     }
     console.log("Aqui");
+
+    return next();
+  }
+  static async isOwnerPost(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const postRepository = AppDataSource.getRepository(Post);
+    const id = parseInt(req.params.id);
+    const post: any = await postRepository.findOne({
+      where: { id: id },
+      relations: { author: true },
+    });
+    const userTokenId = parseInt(res.locals.decoded.sub);
+    if (post?.author.id !== userTokenId) {
+      throw new AppError("You can not do that because you not a owner", 401);
+    }
 
     return next();
   }
