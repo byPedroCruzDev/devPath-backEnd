@@ -6,6 +6,16 @@ export const postRoutes = Router();
 
 postRoutes.post("", Middleware.Auth, PostController.create);
 postRoutes.get("", Middleware.Auth, PostController.listAll);
-postRoutes.get("/:id", PostController.listOne);
-postRoutes.delete("/:id", PostController.delete);
-postRoutes.patch("/:id", PostController.update);
+postRoutes.get("/:id", Middleware.Auth, PostController.listOne);
+postRoutes.delete(
+  "/:id",
+  Middleware.Auth,
+  Middleware.isOwnerPost,
+  PostController.delete
+);
+postRoutes.patch(
+  "/:id",
+  Middleware.Auth,
+  Middleware.isOwnerPost,
+  PostController.update
+);
