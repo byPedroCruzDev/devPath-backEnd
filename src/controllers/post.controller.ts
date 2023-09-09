@@ -19,6 +19,9 @@ export class PostController {
 
     return res.status(200).json(response);
   }
-  static async update() {}
+  static async update(req: Request, res: Response) {
+    const response = await PostService.update(req.body, req.params.id);
+    return res.status(200).json(response);
+  }
   static async delete() {}
 }

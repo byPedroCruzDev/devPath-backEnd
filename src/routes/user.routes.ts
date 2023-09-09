@@ -4,10 +4,15 @@ import { Middleware } from "../middlewares/middlewares";
 
 export const userRoutes = Router();
 
-userRoutes.post("", Middleware.UniqueEmail, UsersController.create);
 userRoutes.get("", Middleware.Auth, UsersController.listAll);
 userRoutes.get("/:id", Middleware.Auth, UsersController.listOne);
-userRoutes.patch("/:id", Middleware.Auth, UsersController.update);
+userRoutes.patch(
+  "/:id",
+  Middleware.Auth,
+  Middleware.isOwner,
+
+  UsersController.update
+);
 userRoutes.delete(
   "/:id",
   Middleware.Auth,

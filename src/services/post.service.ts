@@ -51,7 +51,41 @@ export class PostService {
     return post;
   }
 
-  static async update(req: Request, res: Response) {}
+  static async update(data: any, id: any) {
+    const userRepository = AppDataSource.getRepository(User);
+    const postRepository = AppDataSource.getRepository(Post);
+
+    const post: any = await postRepository.findOne({
+      where: { id: id },
+      relations: { author: true, like: true, comments: true },
+    });
+
+    const postUpdate: any = postRepository.create({
+      ...post,
+      ...data,
+    });
+
+    await postRepository.save(postUpdate);
+
+    delete postUpdate.author.password;
+    delete postUpdate.author.confirmPassword;
+
+    return postUpdate;
+  }
 
   static async delete(req: Request, res: Response) {}
 }
+/* const user: any = await userRepository.findOneBy({
+  id: id,
+});
+
+if (data.password) {
+  data.password = await hash(data.password, 10);
+}
+
+const userUpdate = await userRepository.update(user!.id, data);
+
+const { password, confirmPassword, ...userWithoutPass } =
+  (await userRepository.findOneBy({
+    id: id,
+  })) as any; */
