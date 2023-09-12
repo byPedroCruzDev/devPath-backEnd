@@ -15,6 +15,12 @@ export class likeController {
     const response = await likePostService.listAll(req.params.postId);
     return res.status(200).json(response);
   }
-  static async listOne(req: Request, res: Response) {}
+  static async listOne(req: Request, res: Response) {
+    const response = await likePostService.listOne(
+      req.params.postId,
+      req.params.likeId
+    );
+    return res.status(200).json(response);
+  }
   static async delete(req: Request, res: Response) {}
 }
