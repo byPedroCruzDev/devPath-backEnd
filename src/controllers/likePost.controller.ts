@@ -8,7 +8,10 @@ export class likeController {
     const response: any = await likePostService.create(userId, req.params.id);
     return res.status(201).json(response);
   }
-  static async listAll(req: Request, res: Response) {}
+  static async listAll(req: Request, res: Response) {
+    const response = await likePostService.listAll();
+    return res.status(200).json(response);
+  }
   static async listOne(req: Request, res: Response) {}
   static async delete(req: Request, res: Response) {}
 }

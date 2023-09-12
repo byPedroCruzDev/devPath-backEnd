@@ -29,8 +29,14 @@ export class likePostService {
 
     return post;
   }
-  static async listAll(req: Request, res: Response) {}
-  static async listOne(req: Request, res: Response) {}
+  static async listAll() {
+    const likePostRepository = AppDataSource.getRepository(Like);
+
+    const allLikeInPost = await likePostRepository.find();
+
+    return allLikeInPost;
+  }
+  static async listOne() {}
   static async delete(req: Request, res: Response) {}
 }
 
