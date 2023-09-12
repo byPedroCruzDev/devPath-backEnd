@@ -52,5 +52,23 @@ export class likePostService {
     return likes;
   }
 
-  static async delete(req: Request, res: Response) {}
+  static async delete(postId: any, likeId: any) {
+    const postRepository = AppDataSource.getRepository(Post);
+    const likeRepository = AppDataSource.getRepository(Like);
+
+    const likes: any = await likeRepository.find({
+      where: { post: { id: postId }, id: likeId },
+      relations: ["user"],
+    });
+    console.log(likes, "aquiiiii");
+
+    await likeRepository.delete(likes);
+
+    const resLikes: any = await likeRepository.find({
+      where: { post: { id: postId } },
+      relations: ["user"],
+    });
+
+    return resLikes;
+  }
 }
