@@ -22,5 +22,12 @@ export class likeController {
     );
     return res.status(200).json(response);
   }
-  static async delete(req: Request, res: Response) {}
+  static async delete(req: Request, res: Response) {
+    const response = await likePostService.delete(
+      req.params.postId,
+      req.params.likeId
+    );
+
+    return res.status(200).json(response);
+  }
 }

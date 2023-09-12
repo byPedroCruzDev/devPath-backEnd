@@ -28,3 +28,8 @@ postRoutes.get(
   Middleware.Auth,
   likeController.listOne
 );
+postRoutes.delete(
+  "/:postId/like/:likeId",
+  Middleware.Auth,
+  likeController.delete
+);
