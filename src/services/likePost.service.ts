@@ -29,12 +29,16 @@ export class likePostService {
 
     return post;
   }
-  static async listAll() {
-    const likePostRepository = AppDataSource.getRepository(Like);
+  static async listAll(id: any) {
+    const postRepository = AppDataSource.getRepository(Post);
 
-    const allLikeInPost = await likePostRepository.find();
+    const allLikeInPost = await postRepository.findOne({
+      where: { id: id },
+      relations: { like: true },
+    });
+    console.log(allLikeInPost?.like);
 
-    return allLikeInPost;
+    return allLikeInPost?.like;
   }
   static async listOne() {}
   static async delete(req: Request, res: Response) {}
