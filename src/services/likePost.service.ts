@@ -8,48 +8,38 @@ export class likePostService {
   static async create(userId: any, postId: any) {
     const postRepository = AppDataSource.getRepository(Post);
     const userRepository = AppDataSource.getRepository(User);
+    const likeRepository = AppDataSource.getRepository(Like);
 
-    const likeOwner = await userRepository
+    const likeOwner: any = await userRepository
       .createQueryBuilder("user")
       .where("user.id = id", { id: userId })
       .getOne();
 
-    const post: any = await postRepository
-      .createQueryBuilder("post")
-      .where("post.id = id", { id: postId })
-      .getOne();
+    const post: any = await postRepository.findOneBy({ id: postId });
 
-    post.like = likeOwner;
+    const like = new Like();
+    like.post = post;
+    like.user = likeOwner;
 
-    const createLike = postRepository.create(post);
-    await postRepository.save(createLike);
+    const createLike = likeRepository.create(like);
 
-    delete post.like.password;
-    delete post.like.confirmPassword;
+    await likeRepository.save(createLike);
 
-    return post;
+    return createLike;
   }
-  static async listAll(id: any) {
+  static async listAll(postId: any) {
     const postRepository = AppDataSource.getRepository(Post);
+    const likeRepository = AppDataSource.getRepository(Like);
+    console.log(postId);
 
-    const allLikeInPost = await postRepository.findOne({
-      where: { id: id },
-      relations: { like: true },
+    const likes: any = await likeRepository.find({
+      where: { post: { id: postId } },
+      relations: ["user"],
     });
-    console.log(allLikeInPost?.like);
+    console.log(likes);
 
-    return allLikeInPost?.like;
+    return likes;
   }
   static async listOne() {}
   static async delete(req: Request, res: Response) {}
 }
-
-/* const post: any = postRepository.create({
-    ...data,
-    author: postOwner,
-    creationDate: new Date(),
-    relations: { user: true, comment: true, like: true },
-  });
-  await postRepository.save(post);
-  delete post.author.password;
-  delete post.author.confirmPassword; */
