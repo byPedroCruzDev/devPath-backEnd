@@ -22,3 +22,4 @@ postRoutes.patch(
 );
 
 postRoutes.post("/:id/like", Middleware.Auth, likeController.create);
+postRoutes.get("/:id/like", Middleware.Auth, likeController.listAll);
