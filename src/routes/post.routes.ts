@@ -31,5 +31,6 @@ postRoutes.get(
 postRoutes.delete(
   "/:postId/like/:likeId",
   Middleware.Auth,
+  Middleware.isOwnerLike,
   likeController.delete
 );
