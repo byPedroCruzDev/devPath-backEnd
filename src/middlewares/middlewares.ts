@@ -5,6 +5,7 @@ import { verify } from "jsonwebtoken";
 import { User } from "../entities/user.entity";
 import { AppDataSource } from "../data-source";
 import { Post } from "../entities/post.entity";
+import { Like } from "../entities/like.emtity";
 
 export class Middleware {
   static Auth(req: Request, res: Response, next: NextFunction): void {
@@ -79,6 +80,29 @@ export class Middleware {
     });
     const userTokenId = parseInt(res.locals.decoded.sub);
     if (post?.author.id !== userTokenId) {
+      throw new AppError("You can not do that because you not a owner", 401);
+    }
+
+    return next();
+  }
+  static async isOwnerLike(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const likeRepository = AppDataSource.getRepository(Like);
+
+    const userTokenId = parseInt(res.locals.decoded.sub);
+
+    const postId: any = req.params.postId;
+    const likeId: any = req.params.likeId;
+
+    const like: any = await likeRepository.findOne({
+      where: { post: { id: postId }, id: likeId },
+      relations: ["user"],
+    });
+
+    if (like?.user.id !== userTokenId) {
       throw new AppError("You can not do that because you not a owner", 401);
     }
 

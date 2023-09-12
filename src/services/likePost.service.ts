@@ -56,7 +56,7 @@ export class likePostService {
     const postRepository = AppDataSource.getRepository(Post);
     const likeRepository = AppDataSource.getRepository(Like);
 
-    const likes: any = await likeRepository.find({
+    const likes: any = await likeRepository.findOne({
       where: { post: { id: postId }, id: likeId },
       relations: ["user"],
     });
