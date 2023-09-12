@@ -11,8 +11,7 @@ export class likePostService {
     const likeRepository = AppDataSource.getRepository(Like);
 
     const likeOwner: any = await userRepository.findOneBy({ id: userId });
-    console.log(userId);
-    console.log(likeOwner.id, "aquiiii");
+
     const post: any = await postRepository.findOneBy({ id: postId });
 
     const like = new Like();
@@ -33,16 +32,25 @@ export class likePostService {
   static async listAll(postId: any) {
     const postRepository = AppDataSource.getRepository(Post);
     const likeRepository = AppDataSource.getRepository(Like);
-    console.log(postId);
 
     const likes: any = await likeRepository.find({
       where: { post: { id: postId } },
       relations: ["user"],
     });
-    console.log(likes);
 
     return likes;
   }
-  static async listOne() {}
+  static async listOne(postId: any, likeId: any) {
+    const postRepository = AppDataSource.getRepository(Post);
+    const likeRepository = AppDataSource.getRepository(Like);
+
+    const likes: any = await likeRepository.find({
+      where: { post: { id: postId }, id: likeId },
+      relations: ["user"],
+    });
+
+    return likes;
+  }
+
   static async delete(req: Request, res: Response) {}
 }
