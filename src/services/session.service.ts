@@ -5,6 +5,7 @@ import "dotenv/config";
 import { User } from "../entities/user.entity";
 import AppError from "../errors/appError";
 import { SessionCreate, SessionReturn } from "../interface/session.interfece";
+import { userReturnSchema } from "../schemas/user.schemas";
 
 export class SessionServices {
   static async login({
@@ -13,7 +14,7 @@ export class SessionServices {
   }: SessionCreate): Promise<SessionReturn> {
     const userRepository = AppDataSource.getRepository(User);
 
-    const user: User | null = await userRepository.findOneBy({ email });
+    const user: any | null = await userRepository.findOneBy({ email });
 
     if (!user) throw new AppError("Email or password invalid", 403);
 
@@ -23,7 +24,9 @@ export class SessionServices {
       subject: user.id.toString(),
       expiresIn: "72h",
     });
+    delete user.password;
+    delete user.confirmPassword;
 
-    return { token };
+    return { token, user };
   }
 }
