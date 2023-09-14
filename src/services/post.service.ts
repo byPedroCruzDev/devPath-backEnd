@@ -9,10 +9,7 @@ export class PostService {
     const postRepository = AppDataSource.getRepository(Post);
     const userRepository = AppDataSource.getRepository(User);
 
-    const postOwner = await userRepository
-      .createQueryBuilder("user")
-      .where("user.id = id", { id: id })
-      .getOne();
+    const postOwner = await userRepository.findOneBy({ id: id });
 
     const post: any = postRepository.create({
       ...data,
