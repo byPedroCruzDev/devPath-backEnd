@@ -30,7 +30,6 @@ export class likePostService {
     return likes.reverse();
   }
   static async listAll(postId: any) {
-    const postRepository = AppDataSource.getRepository(Post);
     const likeRepository = AppDataSource.getRepository(Like);
 
     const likes: any = await likeRepository.find({
@@ -41,7 +40,6 @@ export class likePostService {
     return likes;
   }
   static async listOne(postId: any, likeId: any) {
-    const postRepository = AppDataSource.getRepository(Post);
     const likeRepository = AppDataSource.getRepository(Like);
 
     const likes: any = await likeRepository.find({
@@ -53,14 +51,12 @@ export class likePostService {
   }
 
   static async delete(postId: any, likeId: any) {
-    const postRepository = AppDataSource.getRepository(Post);
     const likeRepository = AppDataSource.getRepository(Like);
 
     const likes: any = await likeRepository.findOne({
       where: { post: { id: postId }, id: likeId },
       relations: ["user"],
     });
-    console.log(likes, "aquiiiii");
 
     await likeRepository.delete(likes);
 

@@ -14,19 +14,21 @@ export class SessionServices {
   }: SessionCreate): Promise<SessionReturn> {
     const userRepository = AppDataSource.getRepository(User);
 
-    const user: any | null = await userRepository.findOneBy({ email });
+    const user: User | null = await userRepository.findOneBy({ email });
 
     if (!user) throw new AppError("Email or password invalid", 403);
 
     const passwordMatch: boolean = await compare(password, user.password);
 
+    if (user.password !== password)
+      throw new AppError("Invalid credentials", 401);
+
     const token: string = jwt.sign({}, process.env.SECRET_KEY!, {
       subject: user.id.toString(),
       expiresIn: "72h",
     });
-    delete user.password;
-    delete user.confirmPassword;
+    const userReturn = userReturnSchema.parse(user);
 
-    return { token, user };
+    return { token, userReturn };
   }
 }

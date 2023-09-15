@@ -13,7 +13,7 @@ export class UsersController {
     return res.status(200).json(users);
   }
   static async listOne(req: Request, res: Response) {
-    const response = await UserService.listOne(req.params.id);
+    const response: UserRead = await UserService.listOne(req.params.id);
 
     return res.status(200).json(response);
   }
