@@ -2,12 +2,12 @@ import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { User } from "../entities/user.entity";
 import { Post } from "../entities/post.entity";
-import { time } from "console";
 
 export class PostService {
   static async create(data: any, id: any) {
     const postRepository = AppDataSource.getRepository(Post);
     const userRepository = AppDataSource.getRepository(User);
+    console.log(id);
 
     const postOwner = await userRepository.findOneBy({ id: id });
 
@@ -49,7 +49,6 @@ export class PostService {
   }
 
   static async update(data: any, id: any) {
-    const userRepository = AppDataSource.getRepository(User);
     const postRepository = AppDataSource.getRepository(Post);
 
     const post: any = await postRepository.findOne({

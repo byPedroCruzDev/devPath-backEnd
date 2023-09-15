@@ -11,8 +11,6 @@ export class Middleware {
   static Auth(req: Request, res: Response, next: NextFunction): void {
     let authorization: string | undefined = req.headers.authorization;
 
-    console.log(authorization);
-
     if (!authorization) throw new AppError("Invalid token", 401);
 
     const [bearer, token]: Array<string> = authorization.split(" ");
@@ -55,15 +53,13 @@ export class Middleware {
   ): Promise<void> {
     const userRepository = AppDataSource.getRepository(User);
 
-    const user: any = await userRepository.findOne({
-      where: { id: req.params.id },
-      relations: { post: true },
+    const user: User | any = await userRepository.findOneBy({
+      id: req.params.id,
     });
     const userTokenId = parseInt(res.locals.decoded.sub);
-    if (user?.id !== userTokenId) {
+    if (user.id !== userTokenId) {
       throw new AppError("You can not do that because you not a owner", 401);
     }
-    console.log("Aqui");
 
     return next();
   }

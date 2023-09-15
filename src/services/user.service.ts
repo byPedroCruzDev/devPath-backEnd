@@ -24,15 +24,14 @@ export class UserService {
     return userReturnSchema.parse(createUser);
   }
 
-  static async listOne(id: any) {
+  static async listOne(id: string) {
     const userRepository = AppDataSource.getRepository(User);
 
-    const user: any = await userRepository.findOne({
+    const user = await userRepository.findOne({
       where: { id: id },
-      relations: { post: true },
     });
 
-    return user;
+    return userReadSchema.parse(user);
   }
 
   static async listAll(): Promise<UserReadArray> {
@@ -45,7 +44,7 @@ export class UserService {
   static async update(data: any, id: any): Promise<Response> {
     const userRepository = AppDataSource.getRepository(User);
 
-    const user: any = await userRepository.findOneBy({
+    const user = await userRepository.findOneBy({
       id: id,
     });
 
@@ -63,13 +62,10 @@ export class UserService {
     return userWithoutPass;
   }
 
-  static async delete(id: any): Promise<any> {
+  static async delete(id: any): Promise<void> {
     const userRepository = AppDataSource.getRepository(User);
-
-    const user = await userRepository.delete({
+    const user = await userRepository.softRemove({
       id: id,
     });
-
-    return user;
   }
 }
