@@ -15,7 +15,10 @@ const userCreateSchema = userSchema.omit({
   image: true,
 });
 
-const userReturnSchema = userSchema.omit({ password: true });
+const userReturnSchema = userSchema.omit({
+  password: true,
+  confirmPassword: true,
+});
 const userReadSchema = userReturnSchema;
 const userReadSchemaArray = z.array(userReturnSchema);
 const userUpdateSchema = userCreateSchema.omit({ isAdmin: true }).partial();

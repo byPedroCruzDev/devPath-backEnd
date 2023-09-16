@@ -2,26 +2,33 @@ import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { User } from "../entities/user.entity";
 import { Post } from "../entities/post.entity";
+import {
+  PostArrayReturn,
+  PostCreate,
+  PostRepository,
+  PostReturn,
+} from "../interface/post.interface";
+import { UserRepository } from "../interface/user.interface";
+import { postSchemaArray, postSchemaReturn } from "../schemas/post.schema";
 
 export class PostService {
-  static async create(data: any, id: any) {
+  static async create(data: any, id: string) {
     const postRepository = AppDataSource.getRepository(Post);
     const userRepository = AppDataSource.getRepository(User);
-    console.log(id);
 
-    const postOwner = await userRepository.findOneBy({ id: id });
+    const postOwner: User | null = await userRepository.findOneBy({
+      id: id,
+    });
 
-    const post: any = postRepository.create({
+    const post = postRepository.create({
       ...data,
       author: postOwner,
       creationDate: new Date(),
       relations: { user: true, comment: true, like: true },
     });
     await postRepository.save(post);
-    delete post.author.password;
-    delete post.author.confirmPassword;
 
-    return post;
+    return postSchemaReturn.parse(post);
   }
 
   static async listOne(id: any) {
@@ -35,15 +42,16 @@ export class PostService {
     delete post.author.password;
     delete post.author.confirmPassword;
 
-    return post;
+    return postSchemaReturn.parse(post);
   }
 
-  static async listAll(data: any): Promise<Response> {
+  static async listAll(): Promise<Response> {
     const postRepository = AppDataSource.getRepository(Post);
 
     const post: any = await postRepository.find({
       relations: { author: true, like: true, comments: true },
     });
+    console.log(post);
 
     return post;
   }
