@@ -12,6 +12,8 @@ export class likePostService {
 
     const likeOwner: any = await userRepository.findOneBy({ id: userId });
 
+    console.log(likeOwner, "aaaaaaaaaaaaaa");
+
     const post: any = await postRepository.findOneBy({ id: postId });
 
     const like = new Like();

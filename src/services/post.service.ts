@@ -19,16 +19,18 @@ export class PostService {
     const postOwner: User | null = await userRepository.findOneBy({
       id: id,
     });
+    console.log(data, "aaaaaa", postOwner);
 
-    const post = postRepository.create({
+    const post: any = postRepository.create({
       ...data,
       author: postOwner,
       creationDate: new Date(),
-      relations: { user: true, comment: true, like: true },
     });
     await postRepository.save(post);
+    delete post.author.password;
+    delete post.author.confirmPassword;
 
-    return postSchemaReturn.parse(post);
+    return post;
   }
 
   static async listOne(id: any) {
