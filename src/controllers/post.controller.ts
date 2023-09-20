@@ -11,7 +11,7 @@ export class PostController {
   static async create(req: Request, res: Response): Promise<Response> {
     const userId = res.locals.decoded.sub;
 
-    const response: PostReturn = await PostService.create(req.body, userId);
+    const response = await PostService.create(req.body, userId);
 
     return res.status(201).json(response);
   }
