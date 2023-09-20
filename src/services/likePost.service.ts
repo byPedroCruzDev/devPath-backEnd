@@ -11,8 +11,8 @@ export class likePostService {
     const likeRepository = AppDataSource.getRepository(Like);
 
     const likeOwner: any = await userRepository.findOneBy({ id: userId });
-
-    console.log(likeOwner, "aaaaaaaaaaaaaa");
+    delete likeOwner.password;
+    delete likeOwner.confirmPassword;
 
     const post: any = await postRepository.findOneBy({ id: postId });
 

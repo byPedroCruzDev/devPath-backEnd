@@ -16,9 +16,9 @@ export class PostController {
     return res.status(201).json(response);
   }
   static async listAll(req: Request, res: Response) {
-    const response = await PostService.listAll();
+    const response: any = await PostService.listAll();
 
-    return res.status(200).json(postSchemaArray.parse(response));
+    return res.status(200).json(response);
   }
   static async listOne(req: Request, res: Response): Promise<Response> {
     const response = await PostService.listOne(req.params.id);

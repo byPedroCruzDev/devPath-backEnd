@@ -53,7 +53,6 @@ export class PostService {
     const post: any = await postRepository.find({
       relations: { author: true, like: true, comments: true },
     });
-    console.log(post);
 
     return post;
   }
