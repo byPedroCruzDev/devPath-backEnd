@@ -38,6 +38,7 @@
   },
   "scripts": {
     "dev": "ts-node-dev src/server.ts",
+    "vercel-build": "npx prisma migration deploy",
     "typeorm": "typeorm-ts-node-commonjs",
     "typeorm:create": "typeorm-ts-node-commonjs migration:create src/migrations/createTable -d src/data-source.ts",
     "typeorm:generate": "typeorm-ts-node-commonjs migration:generate src/migrations/createTable -d src/data-source.ts",
