@@ -1,4 +1,4 @@
-# DevPath
+# DevPath  Learning programming with us
 
 # Install
 To run the API. you have to install all required libraries listed at ``package.json``, it is necessary to execute the following command:
