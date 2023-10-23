@@ -12,6 +12,7 @@ import {
   userReadSchemaArray,
   userReturnSchema,
 } from "../schemas/user.schemas";
+import AppError from "../errors/appError";
 
 export class UserService {
   static async create(data: UserCreate): Promise<UserReturn> {
@@ -30,6 +31,7 @@ export class UserService {
     const user = await userRepository.findOne({
       where: { id: id },
     });
+    if (!user) throw new AppError("User not found!");
 
     return userReadSchema.parse(user);
   }
@@ -47,6 +49,7 @@ export class UserService {
     const user = await userRepository.findOneBy({
       id: id,
     });
+    if (!user) throw new AppError("User not found!");
 
     if (data.password) {
       data.password = await hash(data.password, 10);
@@ -67,5 +70,6 @@ export class UserService {
     const user = await userRepository.softRemove({
       id: id,
     });
+    if (!user) throw new AppError("User not found!");
   }
 }
