@@ -12,6 +12,7 @@ export class Middleware {
     let authorization: string | undefined = req.headers.authorization;
 
     if (!authorization) throw new AppError("Invalid token", 401);
+    console.log("here");
 
     const [bearer, token]: Array<string> = authorization.split(" ");
 
@@ -19,6 +20,7 @@ export class Middleware {
       ...res.locals,
       decoded: verify(token, process.env.SECRET_KEY!),
     };
+
     return next();
   }
 
@@ -56,7 +58,9 @@ export class Middleware {
     const user: User | any = await userRepository.findOneBy({
       id: req.params.id,
     });
-    const userTokenId = parseInt(res.locals.decoded.sub);
+    const userTokenId = res.locals.decoded.sub;
+
+    console.log(user.id, userTokenId);
     if (user.id !== userTokenId) {
       throw new AppError("You can not do that because you not a owner", 401);
     }
@@ -74,7 +78,7 @@ export class Middleware {
       where: { id: id },
       relations: { author: true },
     });
-    const userTokenId = parseInt(res.locals.decoded.sub);
+    const userTokenId = res.locals.decoded.sub;
     if (post?.author.id !== userTokenId) {
       throw new AppError("You can not do that because you not a owner", 401);
     }
@@ -88,7 +92,7 @@ export class Middleware {
   ): Promise<void> {
     const likeRepository = AppDataSource.getRepository(Like);
 
-    const userTokenId = parseInt(res.locals.decoded.sub);
+    const userTokenId = res.locals.decoded.sub;
 
     const postId: any = req.params.postId;
     const likeId: any = req.params.likeId;

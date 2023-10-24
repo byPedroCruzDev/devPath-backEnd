@@ -20,8 +20,7 @@ export class SessionServices {
 
     const passwordMatch: boolean = await compare(password, user.password);
 
-    if (user.password !== password)
-      throw new AppError("Invalid credentials", 401);
+    if (!passwordMatch) throw new AppError("Invalid credentials", 401);
 
     const token: string = jwt.sign({}, process.env.SECRET_KEY!, {
       subject: user.id.toString(),

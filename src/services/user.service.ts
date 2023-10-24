@@ -55,7 +55,7 @@ export class UserService {
       data.password = await hash(data.password, 10);
     }
 
-    const userUpdate = await userRepository.update(user!.id, data);
+    await userRepository.update(user!.id, data);
 
     const { password, confirmPassword, ...userWithoutPass } =
       (await userRepository.findOneBy({
@@ -67,7 +67,8 @@ export class UserService {
 
   static async delete(id: any): Promise<void> {
     const userRepository = AppDataSource.getRepository(User);
-    const user = await userRepository.softRemove({
+    console.log("here");
+    const user = await userRepository.delete({
       id: id,
     });
     if (!user) throw new AppError("User not found!");
