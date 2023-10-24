@@ -1,29 +1,75 @@
-import { Request, Response } from "express";
+import { hash } from "bcryptjs";
 import { AppDataSource } from "../data-source";
 import { User } from "../entities/user.entity";
+import {
+  UserCreate,
+  UserRead,
+  UserReadArray,
+  UserReturn,
+} from "../interface/user.interface";
+import {
+  userReadSchema,
+  userReadSchemaArray,
+  userReturnSchema,
+} from "../schemas/user.schemas";
+import AppError from "../errors/appError";
 
-class UserService {
-  static async create(data: any) {
+export class UserService {
+  static async create(data: UserCreate): Promise<UserReturn> {
     const userRepository = AppDataSource.getRepository(User);
 
-    const createUser: any = userRepository.create(data);
+    const createUser: User = userRepository.create(data);
 
     await userRepository.save(createUser);
 
-    const response: any = await userRepository.findOne({
-      where: { id: createUser.id },
-    });
-
-    const { password, ...userResponse } = response;
-
-    return userResponse;
+    return userReturnSchema.parse(createUser);
   }
 
-  static async listOne(req: Request, res: Response) {}
+  static async listOne(id: string) {
+    const userRepository = AppDataSource.getRepository(User);
 
-  static async update(req: Request, res: Response) {}
+    const user = await userRepository.findOne({
+      where: { id: id },
+    });
+    if (!user) throw new AppError("User not found!");
 
-  static async delete(req: Request, res: Response) {}
+    return userReadSchema.parse(user);
+  }
+
+  static async listAll(): Promise<UserReadArray> {
+    const userRepository = AppDataSource.getRepository(User);
+
+    const allUsers = await userRepository.find();
+    return userReadSchemaArray.parse(allUsers);
+  }
+
+  static async update(data: any, id: any): Promise<Response> {
+    const userRepository = AppDataSource.getRepository(User);
+
+    const user = await userRepository.findOneBy({
+      id: id,
+    });
+    if (!user) throw new AppError("User not found!");
+
+    if (data.password) {
+      data.password = await hash(data.password, 10);
+    }
+
+    const userUpdate = await userRepository.update(user!.id, data);
+
+    const { password, confirmPassword, ...userWithoutPass } =
+      (await userRepository.findOneBy({
+        id: id,
+      })) as any;
+
+    return userWithoutPass;
+  }
+
+  static async delete(id: any): Promise<void> {
+    const userRepository = AppDataSource.getRepository(User);
+    const user = await userRepository.softRemove({
+      id: id,
+    });
+    if (!user) throw new AppError("User not found!");
+  }
 }
-
-export default UserService;
