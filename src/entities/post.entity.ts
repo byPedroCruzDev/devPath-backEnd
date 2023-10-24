@@ -10,7 +10,7 @@ import { Comment } from "./comments.entity";
 import { Like } from "./like.emtity";
 @Entity()
 export class Post {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   id: number;
 
   @Column()

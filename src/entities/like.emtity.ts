@@ -4,7 +4,7 @@ import { Post } from "./post.entity";
 
 @Entity()
 export class Like {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   id: number;
 
   @ManyToOne(() => User, (user) => user.like)

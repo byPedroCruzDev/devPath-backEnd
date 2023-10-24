@@ -4,7 +4,7 @@ import { Comment } from "./comments.entity";
 
 @Entity()
 export class CommentLike {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   id: number;
 
   @ManyToOne(() => User, (user) => user.comments)
