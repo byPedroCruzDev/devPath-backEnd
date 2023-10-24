@@ -2,17 +2,42 @@ import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { User } from "../entities/user.entity";
 import { Post } from "../entities/post.entity";
+<<<<<<< Updated upstream
 import { time } from "console";
+import AppError from "../errors/appError";
+=======
+import {
+  PostArrayReturn,
+  PostCreate,
+  PostRepository,
+  PostReturn,
+} from "../interface/post.interface";
+import { UserRepository } from "../interface/user.interface";
+import { postSchemaArray, postSchemaReturn } from "../schemas/post.schema";
+import AppError from "../errors/appError";
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 
 export class PostService {
   static async create(data: any, id: any) {
     const postRepository = AppDataSource.getRepository(Post);
     const userRepository = AppDataSource.getRepository(User);
 
+<<<<<<< Updated upstream
     const postOwner = await userRepository
       .createQueryBuilder("user")
       .where("user.id = id", { id: id })
       .getOne();
+=======
+    const postOwner: User | null = await userRepository.findOneBy({
+      id: id,
+    });
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 
     const post: any = postRepository.create({
       ...data,
@@ -35,6 +60,8 @@ export class PostService {
       relations: { author: true, comments: { author: true }, like: true },
     });
 
+    if (!post) throw new AppError("Post not found!");
+
     delete post.author.password;
     delete post.author.confirmPassword;
 
@@ -47,6 +74,7 @@ export class PostService {
     const post: any = await postRepository.find({
       relations: { author: true, like: true, comments: true },
     });
+    if (!post) throw new AppError("Post not found!");
 
     return post;
   }
@@ -59,6 +87,7 @@ export class PostService {
       where: { id: id },
       relations: { author: true, like: true, comments: true },
     });
+    if (!post) throw new AppError("Post not found!");
 
     const postUpdate: any = postRepository.create({
       ...post,
@@ -77,6 +106,7 @@ export class PostService {
     const postRepository = AppDataSource.getRepository(Post);
 
     const deletedPost: any = await postRepository.delete({ id: id });
+    if (!deletedPost) throw new AppError("Post not found!");
 
     return deletedPost;
   }
