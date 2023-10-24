@@ -2,13 +2,8 @@ import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { User } from "../entities/user.entity";
 import { Post } from "../entities/post.entity";
-<<<<<<< HEAD
-=======
-<<<<<<< Updated upstream
 import { time } from "console";
 import AppError from "../errors/appError";
-=======
->>>>>>> feat/post
 import {
   PostArrayReturn,
   PostCreate,
@@ -17,40 +12,15 @@ import {
 } from "../interface/post.interface";
 import { UserRepository } from "../interface/user.interface";
 import { postSchemaArray, postSchemaReturn } from "../schemas/post.schema";
-<<<<<<< HEAD
-=======
-import AppError from "../errors/appError";
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
->>>>>>> feat/post
 
 export class PostService {
   static async create(data: any, id: string) {
     const postRepository = AppDataSource.getRepository(Post);
     const userRepository = AppDataSource.getRepository(User);
 
-<<<<<<< HEAD
     const postOwner: User | null = await userRepository.findOneBy({
       id: id,
     });
-    console.log(data, "aaaaaa", postOwner);
-=======
-<<<<<<< Updated upstream
-    const postOwner = await userRepository
-      .createQueryBuilder("user")
-      .where("user.id = id", { id: id })
-      .getOne();
-=======
-    const postOwner: User | null = await userRepository.findOneBy({
-      id: id,
-    });
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
->>>>>>> feat/post
 
     const post: any = postRepository.create({
       ...data,
