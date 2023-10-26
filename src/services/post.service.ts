@@ -2,16 +2,12 @@ import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { User } from "../entities/user.entity";
 import { Post } from "../entities/post.entity";
-import { time } from "console";
 import AppError from "../errors/appError";
 import {
-  PostArrayReturn,
-  PostCreate,
-  PostRepository,
-  PostReturn,
-} from "../interface/post.interface";
-import { UserRepository } from "../interface/user.interface";
-import { postSchemaArray, postSchemaReturn } from "../schemas/post.schema";
+  createPostSchema,
+  postSchemaArray,
+  postSchemaReturn,
+} from "../schemas/post.schema";
 
 export class PostService {
   static async create(data: any, id: string) {
@@ -28,42 +24,34 @@ export class PostService {
       creationDate: new Date(),
     });
     await postRepository.save(post);
-    delete post.author.password;
-    delete post.author.confirmPassword;
 
-    return post;
+    return createPostSchema.parse(post);
   }
 
   static async listOne(id: any) {
     const postRepository = AppDataSource.getRepository(Post);
 
-    const post: any = await postRepository.findOne({
+    const post = await postRepository.findOne({
       where: { id: id },
       relations: { author: true, comments: { author: true }, like: true },
     });
 
-    if (!post) throw new AppError("Post not found!");
-
-    delete post.author.password;
-    delete post.author.confirmPassword;
-
     return postSchemaReturn.parse(post);
   }
 
-  static async listAll(): Promise<Response> {
+  static async listAll() {
     const postRepository = AppDataSource.getRepository(Post);
 
-    const post: any = await postRepository.find({
+    const post = await postRepository.find({
       relations: { author: true, like: true, comments: true },
     });
     if (!post) throw new AppError("Post not found!");
 
-    return post;
+    return postSchemaArray.parse(post);
   }
 
   static async update(data: any, id: any) {
     const postRepository = AppDataSource.getRepository(Post);
-
     const post: any = await postRepository.findOne({
       where: { id: id },
       relations: { author: true, like: true, comments: true },
@@ -77,10 +65,7 @@ export class PostService {
 
     await postRepository.save(postUpdate);
 
-    delete postUpdate.author.password;
-    delete postUpdate.author.confirmPassword;
-
-    return postUpdate;
+    return postSchemaReturn.parse(postUpdate);
   }
 
   static async delete(id: any) {

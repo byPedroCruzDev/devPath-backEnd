@@ -1,7 +1,7 @@
 class AppError extends Error {
   statusCode: number;
 
-  constructor(public message: string, status: number = 400) {
+  constructor(public message: string, public status: number = 400) {
     super(message);
   }
 }

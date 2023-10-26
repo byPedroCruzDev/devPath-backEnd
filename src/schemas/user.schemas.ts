@@ -7,7 +7,7 @@ const userSchema = z.object({
   email: z.string().max(150),
   image: z.string(),
   occupation: z.string().max(25),
-  isAdmin: z.boolean(),
+  isAdmin: z.boolean().default(false),
 });
 
 const userCreateSchema = userSchema.omit({
