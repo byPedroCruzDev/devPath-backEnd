@@ -1,11 +1,6 @@
 import { Request, Response } from "express";
 import { PostService } from "../services/post.service";
-import { PostArrayReturn, PostReturn } from "../interface/post.interface";
-import {
-  postSchema,
-  postSchemaArray,
-  postSchemaReturn,
-} from "../schemas/post.schema";
+import { postSchemaReturn } from "../schemas/post.schema";
 
 export class PostController {
   static async create(req: Request, res: Response): Promise<Response> {

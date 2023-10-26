@@ -2,7 +2,7 @@ import { z } from "zod";
 import { userReturnSchema, userSchema } from "./user.schemas";
 
 const postSchema = z.object({
-  id: z.number().positive(),
+  id: z.string(),
   content: z.string(),
   creationDate: z.date(),
   author: userReturnSchema,
