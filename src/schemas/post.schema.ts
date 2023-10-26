@@ -6,14 +6,14 @@ const postSchema = z.object({
   content: z.string(),
   creationDate: z.date(),
   author: userReturnSchema,
-  like: z.array(
+  like: z?.array(
     z.object({
       post: z.array(z.object({})),
       id: z.number(),
       user: userSchema,
     })
   ),
-  comments: z.array(
+  comments: z?.array(
     z.object({
       content: z.string(),
       id: z.number(),
@@ -22,7 +22,8 @@ const postSchema = z.object({
   ),
 });
 
+const createPostSchema = postSchema.omit({ comments: true, like: true });
 const postSchemaReturn = postSchema;
-const postSchemaArray = z.array(postSchemaReturn);
+const postSchemaArray = z.array(postSchema);
 
-export { postSchema, postSchemaReturn, postSchemaArray };
+export { postSchema, postSchemaReturn, postSchemaArray, createPostSchema };

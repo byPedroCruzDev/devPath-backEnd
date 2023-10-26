@@ -12,7 +12,6 @@ export class Middleware {
     let authorization: string | undefined = req.headers.authorization;
 
     if (!authorization) throw new AppError("Invalid token", 401);
-    console.log("here");
 
     const [bearer, token]: Array<string> = authorization.split(" ");
 
@@ -73,8 +72,8 @@ export class Middleware {
     next: NextFunction
   ): Promise<void> {
     const postRepository = AppDataSource.getRepository(Post);
-    const id = parseInt(req.params.id);
-    const post: any = await postRepository.findOne({
+    const id: any = req.params.id;
+    const post = await postRepository.findOne({
       where: { id: id },
       relations: { author: true },
     });
