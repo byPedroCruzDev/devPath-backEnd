@@ -3,7 +3,7 @@ import { likePostService } from "../services/likePost.service";
 
 export class likeController {
   static async create(req: Request, res: Response) {
-    const userId: number = Number(res.locals.decoded.sub);
+    const userId = res.locals.decoded.sub;
 
     const response: any = await likePostService.create(
       userId,
