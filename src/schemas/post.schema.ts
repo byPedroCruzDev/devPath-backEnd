@@ -6,19 +6,22 @@ const postSchema = z.object({
   content: z.string(),
   creationDate: z.date(),
   author: userReturnSchema,
-  like: z?.array(
-    z.object({
-      post: z.array(z.object({})),
-      id: z.number(),
-      user: userSchema,
-    })
+  like: z.optional(
+    z.array(
+      z.object({
+        id: z.string(),
+        user: z.optional(userReturnSchema),
+      })
+    )
   ),
-  comments: z?.array(
-    z.object({
-      content: z.string(),
-      id: z.number(),
-      like: z.number(),
-    })
+  comments: z.optional(
+    z.array(
+      z.object({
+        content: z.string(),
+        id: z.number(),
+        like: z.number(),
+      })
+    )
   ),
 });
 
