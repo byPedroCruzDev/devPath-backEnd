@@ -10,7 +10,7 @@ import { Like } from "../entities/like.emtity";
 export class Middleware {
   static Auth(req: Request, res: Response, next: NextFunction): void {
     let authorization: string | undefined = req.headers.authorization;
-
+    console.log("found");
     if (!authorization) throw new AppError("Invalid token", 401);
 
     const [bearer, token]: Array<string> = authorization.split(" ");

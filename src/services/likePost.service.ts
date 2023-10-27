@@ -3,6 +3,8 @@ import { AppDataSource } from "../data-source";
 import { Like } from "../entities/like.emtity";
 import { User } from "../entities/user.entity";
 import { Post } from "../entities/post.entity";
+import { likeSchema } from "../schemas/likePost.schema";
+import AppError from "../errors/appError";
 
 export class likePostService {
   static async create(userId: any, postId: any) {
@@ -11,10 +13,10 @@ export class likePostService {
     const likeRepository = AppDataSource.getRepository(Like);
 
     const likeOwner: any = await userRepository.findOneBy({ id: userId });
-    delete likeOwner.password;
-    delete likeOwner.confirmPassword;
+    if (!likeOwner) throw new AppError("You are not owner");
 
     const post: any = await postRepository.findOneBy({ id: postId });
+    if (!post) throw new AppError("Post not found");
 
     const like = new Like();
     like.post = post;
@@ -29,7 +31,7 @@ export class likePostService {
       relations: ["user"],
     });
 
-    return likes.reverse();
+    return likeSchema.parse(likes.reverse());
   }
   static async listAll(postId: any) {
     const likeRepository = AppDataSource.getRepository(Like);
@@ -38,18 +40,18 @@ export class likePostService {
       where: { post: { id: postId } },
       relations: ["user"],
     });
-
-    return likes;
+    if (!likes) throw new AppError("likes not found");
+    return likeSchema.parse(likes);
   }
   static async listOne(postId: any, likeId: any) {
     const likeRepository = AppDataSource.getRepository(Like);
 
-    const likes: any = await likeRepository.find({
+    const like: any = await likeRepository.find({
       where: { post: { id: postId }, id: likeId },
       relations: ["user"],
     });
-
-    return likes;
+    if (!like) throw new AppError("likes not found");
+    return likeSchema.parse(like);
   }
 
   static async delete(postId: any, likeId: any) {
@@ -66,7 +68,8 @@ export class likePostService {
       where: { post: { id: postId } },
       relations: ["user"],
     });
+    if (!likes) throw new AppError("likes not found");
 
-    return resLikes;
+    return likeSchema.parse(resLikes);
   }
 }

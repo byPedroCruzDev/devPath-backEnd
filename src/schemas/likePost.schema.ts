@@ -2,12 +2,13 @@ import { z } from "zod";
 import { userReturnSchema } from "./user.schemas";
 import { postSchema } from "./post.schema";
 
-const likeSchema = z.object({
-  id: z.string(),
-  user: userReturnSchema,
-  post: postSchema,
-});
+const likeSchema = z.array(
+  z.object({
+    id: z.string(),
+    user: userReturnSchema,
+  })
+);
 
-const createLike = likeSchema.omit({ post: true });
+const likeArray = z.array(likeSchema);
 
-export { likeSchema, createLike };
+export { likeSchema, likeArray };
